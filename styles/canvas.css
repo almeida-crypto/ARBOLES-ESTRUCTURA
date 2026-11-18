@@ -1,0 +1,333 @@
+/* --- Main Stage --- */
+.stage {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.metrics-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.metric-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--ink-secondary);
+}
+
+.metric-chip strong {
+  font-family: var(--font-mono);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-secondary);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Interactive Canvas */
+.canvas-wrap {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--canvas-bg);
+  background-image: radial-gradient(var(--canvas-dot) 1.1px, transparent 1.1px);
+  background-size: 24px 24px;
+  cursor: grab;
+  user-select: none;
+}
+
+.canvas-wrap.panning {
+  cursor: grabbing;
+}
+
+.tree-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.canvas-toolbar {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 5px;
+  box-shadow: 0 4px 14px rgba(16, 29, 44, 0.08);
+  z-index: 4;
+}
+
+.tool-btn {
+  background: transparent;
+  border: none;
+  color: var(--ink);
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.14s ease;
+}
+
+.tool-btn:hover {
+  background: var(--surface-alt);
+}
+
+.tool-btn.active {
+  background: var(--signal-cobalt-soft);
+  color: var(--signal-cobalt);
+}
+
+.tool-btn-wide {
+  width: auto;
+  padding: 0 10px;
+  font-size: 12px;
+}
+
+.canvas-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--ink-secondary);
+  pointer-events: none;
+}
+
+.empty-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  gap: 12px;
+  background: rgba(247, 246, 242, 0.72);
+}
+
+.empty-state[hidden] {
+  display: none;
+}
+
+.empty-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.empty-desc {
+  max-width: 42ch;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-secondary);
+}
+
+/* SVG Tree Elements */
+.level-band-rect {
+  transition: fill 0.25s ease, opacity 0.25s ease;
+}
+
+.level-band-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  fill: #64748b;
+  letter-spacing: 0.04em;
+}
+
+.edge-line {
+  stroke: #8a99aa;
+  stroke-width: 2.5;
+  fill: none;
+  transition: stroke 0.25s ease, stroke-width 0.25s ease, opacity 0.25s ease;
+}
+
+.edge-line.state-path {
+  stroke: var(--signal-cobalt);
+  stroke-width: 4;
+}
+
+.edge-line.state-found {
+  stroke: var(--signal-emerald);
+  stroke-width: 4.5;
+}
+
+.edge-line.state-compare {
+  stroke: var(--signal-amber-fill);
+  stroke-width: 4;
+}
+
+.edge-line.state-delete {
+  stroke: var(--signal-crimson);
+  stroke-width: 4;
+  stroke-dasharray: 6 4;
+}
+
+.edge-dir-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--ink-secondary);
+  paint-order: stroke;
+  stroke: var(--canvas-bg);
+  stroke-width: 4px;
+}
+
+.node-group {
+  cursor: pointer;
+  transition: transform 0.4s var(--ease-out);
+}
+
+.node-circle {
+  fill: #ffffff;
+  stroke: var(--ink);
+  stroke-width: 2.8;
+  transition: fill 0.22s ease, stroke 0.22s ease, stroke-width 0.22s ease;
+}
+
+.node-halo {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 6;
+  transition: stroke 0.22s ease, r 0.22s ease;
+}
+
+.node-value {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  fill: var(--ink);
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  transition: fill 0.22s ease;
+}
+
+.node-meta-badge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+/* Node States */
+.node-group:hover .node-circle {
+  stroke: var(--signal-cobalt);
+  stroke-width: 3.4;
+}
+
+.node-group.state-visited .node-circle {
+  fill: var(--signal-cobalt);
+  stroke: #0c3582;
+}
+.node-group.state-visited .node-value {
+  fill: #ffffff;
+}
+
+.node-group.state-compare .node-circle {
+  fill: var(--signal-amber-fill);
+  stroke: #7c4800;
+}
+.node-group.state-compare .node-value {
+  fill: #ffffff;
+}
+.node-group.state-compare .node-halo {
+  stroke: rgba(224, 139, 0, 0.28);
+}
+
+.node-group.state-found .node-circle {
+  fill: var(--signal-emerald);
+  stroke: #095236;
+}
+.node-group.state-found .node-value {
+  fill: #ffffff;
+}
+.node-group.state-found .node-halo {
+  stroke: rgba(18, 138, 91, 0.28);
+}
+
+.node-group.state-delete .node-circle {
+  fill: var(--signal-crimson);
+  stroke: #7f1d1d;
+}
+.node-group.state-delete .node-value {
+  fill: #ffffff;
+}
+.node-group.state-delete .node-halo {
+  stroke: rgba(201, 54, 54, 0.3);
+}
+
+.signal-pulse {
+  fill: #ffffff;
+  stroke: var(--signal-cobalt);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 6px rgba(29, 99, 220, 0.65));
+  pointer-events: none;
+}

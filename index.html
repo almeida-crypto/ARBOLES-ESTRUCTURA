@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABB Signal Lab — Árbol Binario de Búsqueda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/rail.css">
+  <link rel="stylesheet" href="styles/canvas.css">
+  <link rel="stylesheet" href="styles/panels.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="rail" id="rail">
+      <div class="rail-header">
+        <div class="brand">
+          <span class="brand-signal" aria-hidden="true"></span>
+          <div>
+            <div class="brand-title">ABB Signal Lab</div>
+            <span class="brand-sub">Árbol Binario de Búsqueda</span>
+          </div>
+        </div>
+        <button type="button" class="mobile-menu-toggle" id="mobileMenuBtn" aria-expanded="true">
+          Menú
+        </button>
+      </div>
+
+      <div class="rail-controls">
+        <div class="input-row">
+          <input type="number" id="nodeValueInput" class="node-input tabular" placeholder="Valor entero (ej. 42)"
+            aria-label="Valor entero del nodo">
+          <button type="button" id="quickInsertBtn" class="btn-primary">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"
+              aria-hidden="true">
+              <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+            </svg>
+            Insertar
+          </button>
+        </div>
+
+        <div class="lca-row" id="lcaInputs" hidden>
+          <input type="number" id="lcaInputA" class="node-input tabular" placeholder="Nodo A"
+            aria-label="Primer nodo para Ancestro Común">
+          <input type="number" id="lcaInputB" class="node-input tabular" placeholder="Nodo B"
+            aria-label="Segundo nodo para Ancestro Común">
+          <button type="button" id="runLcaBtn" class="btn-primary">Calcular</button>
+        </div>
+
+        <div class="utility-strip">
+          <button type="button" id="presetBtn" class="btn-rail-util">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"
+              aria-hidden="true">
+              <circle cx="8" cy="3.5" r="1.75" />
+              <circle cx="4" cy="11.5" r="1.75" />
+              <circle cx="12" cy="11.5" r="1.75" />
+              <path d="M6.8 4.8L4.9 10M9.2 4.8l1.9 5.2" stroke-linecap="round" />
+            </svg>
+            Ejemplo base
+          </button>
+          <button type="button" id="randomBtn" class="btn-rail-util">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"
+              aria-hidden="true">
+              <path d="M2.5 5h2.2l5.8 6h3M13.5 5h-3l-1.7 1.8M2.5 11h2.2l1.7-1.8" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M12 3.5L13.5 5 12 6.5M12 9.5L13.5 11 12 12.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Aleatorio
+          </button>
+        </div>
+
+        <div class="speed-row">
+          <label for="speedSelect">Velocidad de señal</label>
+          <select id="speedSelect" class="speed-select">
+            <option value="720">Pausada (720 ms)</option>
+            <option value="440" selected>Normal (440 ms)</option>
+            <option value="200">Rápida (200 ms)</option>
+            <option value="0">Inmediata</option>
+          </select>
+        </div>
+      </div>
+
+      <nav class="rail-scroll" aria-label="Menú de 15 operaciones del ABB">
+        <div>
+          <div class="menu-section-label">Operaciones Base (01–10)</div>
+          <div class="op-list">
+            <button type="button" class="op-btn" data-op="print">
+              <span class="op-title"><span class="op-num">01</span><span>Imprimir elementos del árbol</span></span>
+              <span class="op-tag">LIST</span>
+            </button>
+            <button type="button" class="op-btn" data-op="search">
+              <span class="op-title"><span class="op-num">02</span><span>Buscar un elemento</span></span>
+              <span class="op-tag">BUSQ</span>
+            </button>
+            <button type="button" class="op-btn" data-op="insert">
+              <span class="op-title"><span class="op-num">03</span><span>Insertar un elemento</span></span>
+              <span class="op-tag">+</span>
+            </button>
+            <button type="button" class="op-btn" data-op="bfs">
+              <span class="op-title"><span class="op-num">05</span><span>Recorrido en anchura</span></span>
+              <span class="op-tag">BFS</span>
+            </button>
+            <button type="button" class="op-btn" data-op="preorder">
+              <span class="op-title"><span class="op-num">06</span><span>Recorrido en preorden</span></span>
+              <span class="op-tag">N-I-D</span>
+            </button>
+            <button type="button" class="op-btn" data-op="postorder">
+              <span class="op-title"><span class="op-num">07</span><span>Recorrido en postorden</span></span>
+              <span class="op-tag">I-D-N</span>
+            </button>
+            <button type="button" class="op-btn" data-op="inorder">
+              <span class="op-title"><span class="op-num">08</span><span>Recorrido en inorden</span></span>
+              <span class="op-tag">I-N-D</span>
+            </button>
+            <button type="button" class="op-btn" data-op="levels">
+              <span class="op-title"><span class="op-num">09</span><span>Número de niveles del árbol</span></span>
+              <span class="op-tag">ALT</span>
+            </button>
+            <button type="button" class="op-btn" data-op="node-level">
+              <span class="op-title"><span class="op-num">10</span><span>Nivel de un nodo específico</span></span>
+              <span class="op-tag">NIV</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="menu-section-label">Operaciones Extra (11–15)</div>
+          <div class="op-list">
+            <button type="button" class="op-btn op-custom" data-op="minmax">
+              <span class="op-title"><span class="op-num">11</span><span>Extremos: Mínimo y Máximo</span></span>
+              <span class="op-tag">MIN/MAX</span>
+            </button>
+            <button type="button" class="op-btn op-custom" data-op="stats">
+              <span class="op-title"><span class="op-num">12</span><span>Estadísticas: Nodos y Suma</span></span>
+              <span class="op-tag">∑</span>
+            </button>
+            <button type="button" class="op-btn op-custom" data-op="balance-check">
+              <span class="op-title"><span class="op-num">13</span><span>Verificar Balanceo (AVL)</span></span>
+              <span class="op-tag">FE</span>
+            </button>
+            <button type="button" class="op-btn op-custom" data-op="lca">
+              <span class="op-title"><span class="op-num">14</span><span>Ancestro Común (LCA)</span></span>
+              <span class="op-tag">LCA</span>
+            </button>
+            <button type="button" class="op-btn op-custom" data-op="rebalance">
+              <span class="op-title"><span class="op-num">15</span><span>Balancear ABB (Óptimo)</span></span>
+              <span class="op-tag">BAL</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="rail-danger-zone">
+        <button type="button" class="op-btn op-danger" data-op="delete">
+          <span class="op-title"><span class="op-num">04</span><span>Borrar un elemento</span></span>
+          <span class="op-tag">DEL</span>
+        </button>
+        <button type="button" class="btn-clear-tree" id="clearTreeBtn">
+          Vaciar árbol completo
+        </button>
+      </div>
+    </aside>
+
+    <main class="stage">
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 class="page-title">Representación Gráfica del ABB</h1>
+          <div class="metrics-bar">
+            <span class="metric-chip">Nodos <strong id="metricNodes" class="tabular">0</strong></span>
+            <span class="metric-chip">Niveles <strong id="metricLevels" class="tabular">0</strong></span>
+            <span class="metric-chip">Raíz <strong id="metricRoot" class="tabular">—</strong></span>
+          </div>
+        </div>
+
+        <div class="legend" aria-label="Leyenda de colores">
+          <span class="legend-item"><span class="legend-dot" style="background: var(--signal-cobalt)"></span>Visitado /
+            Ruta</span>
+          <span class="legend-item"><span class="legend-dot"
+              style="background: var(--signal-amber-fill)"></span>Comparando</span>
+          <span class="legend-item"><span class="legend-dot" style="background: var(--signal-emerald)"></span>Encontrado
+            / Insertado</span>
+          <span class="legend-item"><span class="legend-dot" style="background: var(--signal-crimson)"></span>Eliminar /
+            Alerta</span>
+        </div>
+      </header>
+
+      <section class="canvas-wrap" id="canvasWrap" aria-label="Lienzo gráfico del árbol">
+        <div class="canvas-toolbar">
+          <button type="button" class="tool-btn" id="zoomInBtn" title="Acercar" aria-label="Acercar">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"
+              aria-hidden="true">
+              <path d="M8 3v10M3 8h10" stroke-linecap="round" />
+            </svg>
+          </button>
+          <button type="button" class="tool-btn" id="zoomOutBtn" title="Alejar" aria-label="Alejar">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"
+              aria-hidden="true">
+              <path d="M3 8h10" stroke-linecap="round" />
+            </svg>
+          </button>
+          <button type="button" class="tool-btn tool-btn-wide" id="fitBtn" title="Ajustar al lienzo">Ajustar</button>
+          <button type="button" class="tool-btn tool-btn-wide" id="toggleBandsBtn"
+            title="Mostrar u ocultar bandas de nivel">Niveles</button>
+          <button type="button" class="tool-btn tool-btn-wide" id="toggleDirsBtn" title="Mostrar etiquetas Izq/Der">I /
+            D</button>
+        </div>
+
+        <svg class="tree-svg" id="treeSvg" viewBox="0 0 900 560">
+          <g id="viewportGroup">
+            <g id="bandsLayer"></g>
+            <g id="edgesLayer"></g>
+            <g id="pulsesLayer"></g>
+            <g id="nodesLayer"></g>
+          </g>
+        </svg>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <div class="empty-title">El árbol está vacío</div>
+          <p class="empty-desc">
+            Escribe un número entero en el panel izquierdo y presiona <strong>Insertar</strong>, o carga el
+            <strong>Ejemplo base</strong> para explorar las 15 operaciones.
+          </p>
+        </div>
+
+        <div class="print-panel" id="printPanel" hidden>
+          <div class="print-panel-head">
+            <span class="print-panel-title">01 · Impresión Estructural del ABB</span>
+            <button type="button" class="print-panel-close" id="closePrintBtn">Cerrar</button>
+          </div>
+          <div class="print-panel-body" id="printPanelBody"></div>
+        </div>
+
+        <div class="canvas-hint">
+          Clic en un nodo para cargar su valor · Arrastra para mover · Rueda para zoom
+        </div>
+      </section>
+
+      <footer class="output-strip" aria-live="polite">
+        <div class="output-info">
+          <div class="output-op-name" id="outputOpName">Sistema listo</div>
+          <div class="output-message" id="outputMessage">
+            Árbol inicial cargado con 9 elementos. Selecciona cualquier operación del menú o haz clic sobre un nodo.
+          </div>
+        </div>
+        <div class="output-sequence" id="outputSequence"></div>
+      </footer>
+    </main>
+  </div>
+
+  <script defer src="js/bst/bst-core.js"></script>
+  <script defer src="js/bst/bst-traversals.js"></script>
+  <script defer src="js/bst/bst-extras.js"></script>
+  <script defer src="js/state.js"></script>
+  <script defer src="js/ui/output.js"></script>
+  <script defer src="js/ui/pan-zoom.js"></script>
+  <script defer src="js/ui/renderer.js"></script>
+  <script defer src="js/ops/ops-core.js"></script>
+  <script defer src="js/ops/ops-traversals.js"></script>
+  <script defer src="js/ops/ops-custom.js"></script>
+  <script defer src="js/main.js"></script>
+</body>
+
+</html>
