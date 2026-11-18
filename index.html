@@ -87,7 +87,7 @@
         </div>
       </div>
 
-      <nav class="rail-scroll" aria-label="Menú de 15 operaciones del ABB">
+      <nav class="rail-scroll" aria-label="Menú de 20 operaciones del ABB">
         <div>
           <div class="menu-section-label">Operaciones Base (01–10)</div>
           <div class="op-list">
@@ -152,6 +152,32 @@
             <button type="button" class="op-btn op-custom" data-op="rebalance">
               <span class="op-title"><span class="op-num">15</span><span>Balancear ABB (Óptimo)</span></span>
               <span class="op-tag">BAL</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="menu-section-label">Operaciones Extra  (16–20)</div>
+          <div class="op-list">
+            <button type="button" class="op-btn op-custom" data-op="succ-pred">
+              <span class="op-title"><span class="op-num">16</span><span>Sucesor y Predecesor</span></span>
+              <span class="op-tag">SUC</span>
+            </button>
+            <button type="button" class="op-btn op-custom" data-op="kth">
+              <span class="op-title"><span class="op-num">17</span><span>K-ésimo menor (valor = K)</span></span>
+              <span class="op-tag">K</span>
+            </button>
+            <button type="button" class="op-btn op-custom" data-op="level-nodes">
+              <span class="op-title"><span class="op-num">18</span><span>Nodos de un nivel (valor = nivel)</span></span>
+              <span class="op-tag">LVL</span>
+            </button>
+            <button type="button" class="op-btn op-custom" data-op="ancestors">
+              <span class="op-title"><span class="op-num">19</span><span>Ancestros de un nodo</span></span>
+              <span class="op-tag">ANC</span>
+            </button>
+            <button type="button" class="op-btn op-custom" data-op="max-width">
+              <span class="op-title"><span class="op-num">20</span><span>Ancho máximo del árbol</span></span>
+              <span class="op-tag">ANCHO</span>
             </button>
           </div>
         </div>
@@ -225,7 +251,7 @@
           <div class="empty-title">El árbol está vacío</div>
           <p class="empty-desc">
             Escribe un número entero en el panel izquierdo y presiona <strong>Insertar</strong>, o carga el
-            <strong>Ejemplo base</strong> para explorar las 15 operaciones.
+            <strong>Ejemplo base</strong> para explorar las 20 operaciones.
           </p>
         </div>
 
@@ -257,6 +283,7 @@
   <script defer src="js/bst/bst-core.js"></script>
   <script defer src="js/bst/bst-traversals.js"></script>
   <script defer src="js/bst/bst-extras.js"></script>
+  <script defer src="js/bst/bst-extras2.js"></script>
   <script defer src="js/state.js"></script>
   <script defer src="js/ui/output.js"></script>
   <script defer src="js/ui/pan-zoom.js"></script>
@@ -264,6 +291,7 @@
   <script defer src="js/ops/ops-core.js"></script>
   <script defer src="js/ops/ops-traversals.js"></script>
   <script defer src="js/ops/ops-custom.js"></script>
+  <script defer src="js/ops/ops-extra.js"></script>
   <script defer src="js/main.js"></script>
 </body>
 

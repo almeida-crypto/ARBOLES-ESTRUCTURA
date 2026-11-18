@@ -18,7 +18,12 @@
     stats: () => ops.runStats(),
     'balance-check': () => ops.runBalanceCheck(),
     lca: () => ops.runLCA(false),
-    rebalance: () => ops.runRebalance()
+    rebalance: () => ops.runRebalance(),
+    'succ-pred': () => ops.runSuccPred(),
+    kth: () => ops.runKth(),
+    'level-nodes': () => ops.runNodesAtLevel(),
+    ancestors: () => ops.runAncestors(),
+    'max-width': () => ops.runMaxWidth()
   };
 
   function handleOperation(op) {
@@ -44,7 +49,7 @@
     );
   }
 
-  // Menú de 15 operaciones
+  // Menú de 20 operaciones
   dom.opButtons.forEach((btn) => {
     btn.addEventListener('click', () => handleOperation(btn.dataset.op));
   });
@@ -136,6 +141,6 @@
   loadValuesAndRender(
     PRESET_VALUES,
     'Sistema listo',
-    'ABB inicial cargado con 9 elementos. Ejecuta cualquiera de las 15 operaciones del menú izquierdo.'
+    'ABB inicial cargado con 9 elementos. Ejecuta cualquiera de las 20 operaciones del menú izquierdo.'
   );
 })();
